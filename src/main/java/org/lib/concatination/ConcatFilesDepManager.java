@@ -1,14 +1,15 @@
-package org.lib.implementaions;
+package org.lib.concatination;
 
 import org.lib.domain.interfaces.Dependency;
-import org.lib.domain.models.ConcatFilesDependency;
 
 import java.io.*;
 import java.util.*;
 
 public class ConcatFilesDepManager {
     private Map<File, ConcatFilesDependency> innerRepo;
-    private String mainFolder;
+    private final String mainFolder;
+
+    private boolean isBuilt;
 
     public ConcatFilesDepManager(String mainFolder) {
         var check = new File(mainFolder);
@@ -19,6 +20,7 @@ public class ConcatFilesDepManager {
         if (!mainFolder.endsWith(File.pathSeparator)) {
             mainFolder += File.pathSeparator;
         }
+        this.isBuilt = false;
     }
 
     public Dependency<File> add(File file) {
@@ -41,6 +43,11 @@ public class ConcatFilesDepManager {
                 item.addDependency(innerRepo.get(file));
             }
         }
+        isBuilt = true;
+    }
+
+    public List<ConcatFilesDependency> getResult() {
+        return innerRepo.values().stream().toList();
     }
 
     private List<File> getDependenciesFiles(String path) throws RuntimeException {

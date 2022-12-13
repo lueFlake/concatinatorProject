@@ -1,4 +1,4 @@
-package org.lib.domain.models;
+package org.lib.concatination;
 
 import org.lib.domain.interfaces.Dependency;
 
