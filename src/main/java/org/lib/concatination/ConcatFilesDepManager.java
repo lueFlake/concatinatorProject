@@ -16,10 +16,12 @@ public class ConcatFilesDepManager {
         if (!check.exists() || !check.isDirectory()) {
             throw new RuntimeException("Нет такой папки");
         }
-        this.mainFolder = mainFolder;
-        if (!mainFolder.endsWith(File.pathSeparator)) {
-            mainFolder += File.pathSeparator;
+        if (!mainFolder.endsWith(File.separator)) {
+            this.mainFolder = mainFolder + File.separator;
+        } else {
+            this.mainFolder = mainFolder;
         }
+        this.innerRepo = new TreeMap<>();
         this.isBuilt = false;
     }
 
@@ -35,12 +37,12 @@ public class ConcatFilesDepManager {
     public void build() throws RuntimeException {
         for (var item : innerRepo.values()) {
             var files = getDependenciesFiles(item.getValue().getPath()).stream()
-                    .map(s->mainFolder + s).toList();
+                    .map(s->new File(mainFolder + s)).toList();
             for (var file : files) {
                 if (!innerRepo.containsKey(file)) {
-                    throw new RuntimeException(String.format("Файл не существовал на момент записи."));
+                    throw new RuntimeException(String.format("Файл не существовал на момент записи: " + file.getAbsolutePath()));
                 }
-                item.addDependency(innerRepo.get(file));
+                innerRepo.get(file).addDependent(item);
             }
         }
         isBuilt = true;
@@ -55,8 +57,8 @@ public class ConcatFilesDepManager {
             var result = new ArrayList<File>();
             String line = reader.readLine();
             while (line != null) {
-                if (line.startsWith("require ")) {
-                    String depPath = line.substring(8);
+                if (line.startsWith("require '")) {
+                    String depPath = line.substring(9, line.length() - 1);
                     result.add(new File(depPath));
                 }
                 line = reader.readLine();

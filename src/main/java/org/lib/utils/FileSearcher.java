@@ -1,6 +1,7 @@
 package org.lib.utils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,6 +18,7 @@ public class FileSearcher {
         this.where = new File(path);
         this.searchComplete = false;
         this.filesFound = 0;
+        this.result = new ArrayList<>();
     }
 
     public List<File> Search() {

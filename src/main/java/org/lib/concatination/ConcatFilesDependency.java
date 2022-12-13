@@ -19,11 +19,11 @@ public class ConcatFilesDependency implements Dependency<File> {
     }
 
     @Override
-    public List<Dependency<File>> getDependencies() {
+    public List<Dependency<File>> getDependent() {
         return dependencies;
     }
 
-    public void addDependency(ConcatFilesDependency dep) {
+    public void addDependent(ConcatFilesDependency dep) {
         dependencies.add(dep);
     }
 
@@ -39,6 +39,6 @@ public class ConcatFilesDependency implements Dependency<File> {
 
     @Override
     public String toString() {
-        return String.format("[{0}]: {1}", id, file.getName());
+        return file.getAbsolutePath();
     }
 }

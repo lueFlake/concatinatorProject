@@ -1,4 +1,4 @@
-package org.lib.domain.models;
+package org.lib.domain.exceptions;
 
 import org.lib.domain.interfaces.Dependency;
 
